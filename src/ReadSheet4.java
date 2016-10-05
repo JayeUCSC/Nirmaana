@@ -13,6 +13,14 @@ public class ReadSheet4 {
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
+
+        FileInputStream fs = new FileInputStream(new File(path));
+        XSSFWorkbook wb = new XSSFWorkbook(fs);
+        XSSFSheet sheet = wb.getSheetAt(4);
+        Object [][] hardcodeValues = {{10,0,"TRIM STORES"}};
+        reader.hardCodeValidator(sheet,hardcodeValues);
+        System.out.println("Sheet 4 fully validated");
+
         HashMap <String,Object> sheet3  = new HashMap();
         sheet3.putAll(readTable1(path));
         sheet3.putAll(trimStores(path));

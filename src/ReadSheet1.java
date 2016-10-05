@@ -16,6 +16,14 @@ public class ReadSheet1 {
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
+
+        FileInputStream fs = new FileInputStream(new File(path));
+        XSSFWorkbook wb = new XSSFWorkbook(fs);
+        XSSFSheet sheet = wb.getSheetAt(0);
+        Object [][] hardcodeValues = {{6,9,"Total"},{6,10,"Test Cut Requirement"}};
+        reader.hardCodeValidator(sheet,hardcodeValues);
+        System.out.println("Sheet 1 fully validated");
+
         HashMap <String,Object> sheet1  = new HashMap();
         sheet1.putAll(readTable1(path));
         sheet1.putAll(readTable2(path));

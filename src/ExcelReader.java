@@ -18,9 +18,7 @@ import java.util.List;
  */
 public class ExcelReader {
 
-    public void a(){
-        System.out.println("ss");
-    }
+    
 
     public HashMap readColumnHeaderTable(XSSFSheet workSheet, int rowIndexOfHeaderStart, int[] headerIndexes, int rowIndexOfStartCell, int rowIndexOfEndCell) {
 
@@ -120,7 +118,7 @@ public class ExcelReader {
 
                 XSSFCell cell = headerRow.getCell(j);
                 header[j-columnIndexOfHeaderStart] = getValue(cell).toString();
-                System.out.println(0 + " " + j);
+                //System.out.println(0 + " " + j);
                 //System.out.println(header[j]);
             }
         }
@@ -240,7 +238,7 @@ public class ExcelReader {
             outerHashmap.put(i + 1, innerHashMap);
 
         }
-        System.out.println("--- Return HashMap ---");
+        //System.out.println("--- Return HashMap ---");
         return outerHashmap;
     }
 
@@ -302,7 +300,7 @@ public class ExcelReader {
             outerHashmap.put(i + 1, innerHashMap);
 
         }
-        System.out.println("--- Return HashMap ---");
+        //System.out.println("--- Return HashMap ---");
 
         return outerHashmap;
     }
@@ -356,7 +354,7 @@ public class ExcelReader {
                     if (Arrays.binarySearch(rowHeaderIndexes, j) >= 0) {
                         XSSFCell cell = row.getCell(i);
                         String value = getValue(cell).toString();
-                        System.out.println(value);
+                        //System.out.println(value);
                         innerHashmap.put(rowHeaders[j - rowIndexOfHeaderStart], value);
                     }
                 }
@@ -551,21 +549,20 @@ public class ExcelReader {
 
     }
 
+    public void hardCodeValidator (XSSFSheet sheet, Object [][] headers){
 
-    public boolean hardCodeValidator (XSSFSheet sheet, Object [][] headers){
-        boolean validate = false;
         for (int i= 0; i< headers.length; i++){
             int row = (int)headers[i][0];
             int column = (int)headers[i][1];
             XSSFCell cell = sheet.getRow(row).getCell(column);
             if (getValue(cell).toString().trim().equals(headers[i][2])){
                 System.out.println("Excel Data in row " +row +  " and column " + column+ " is validated");
-                validate = true;
+
             }else {
                 throw new RuntimeException("Excel Data in row " +row +  " and column " + column+ " is mismatch");
             }
         }
-        return validate;
+
     }
 
 }

@@ -15,8 +15,15 @@ public class ReadSheet3 {
 
     public HashMap finalOutput (String path) throws IOException {
 
-        Object [][] hardcodeValues = {{35,0,"FTT 1 PERCENTAGE"},{35,2,"QUALITY PERSON NAME & SIGNATURE"},{30,7,"CHECK FINISH"},{7,15,"FTT - 2 DETAILS"}, {9,15,"FTT -2 STATUS\n" +
-                "(PLEASE TICK) (ü)"}};
+        FileInputStream fs = new FileInputStream(new File(path));
+        XSSFWorkbook wb = new XSSFWorkbook(fs);
+        XSSFSheet sheet = wb.getSheetAt(3);
+        Object [][] hardcodeValues = {{7,0,"SEWING INFORMATION"},{29,0,"QUALITY INFORMATION"},{35,0,"FTT 1 PERCENTAGE"},{35,2,"QUALITY PERSON NAME & SIGNATURE"},{30,7,"CHECK FINISH"},{39,0,"DAMAGE STATUS"},{7,15,"FTT - 2 DETAILS"}, {9,15,"FTT -2 STATUS\n" +
+                "(PLEASE TICK) (ü)"},{0,20,"PTP & OTD DETAILS"},{3,20,"PTP"},{5,20,"OTD \n" +
+                "(PLEASE TICK)"},{7,20,"FAILURE REASONS"}};
+        reader.hardCodeValidator(sheet,hardcodeValues);
+        System.out.println("Sheet 3 fully validated");
+
         HashMap <String,Object> sheet3  = new HashMap();
         sheet3.putAll(sewingInfo(path));
         sheet3.putAll(qualityInfo(path));
