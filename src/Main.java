@@ -13,10 +13,10 @@ public class Main {
 /*
         System.out.println("Hello World!");
 
-        File excelFile = new File("F:\\Intern - nCinga\\Dev\\2nd one\\JC\\865834  RM Chart 2nd Proto.xlsx");
+        File excelFile = new File("F:\\Intern - nCinga\\Dev\\2nd one\\JC\\output Jsons\\865834  RM Chart 2nd Proto.xlsx");
         FileInputStream inputFile = new FileInputStream(excelFile);
         XSSFWorkbook workBook = new XSSFWorkbook(inputFile);
-        XSSFSheet workSheet = workBook.getSheetAt(0);
+        XSSFSheet workSheet = workBook.getSheetAt(3);
 
         int[] rowIndexes = {2,3,4,5,6,7,8,9,10,11,12,13};
 
@@ -26,7 +26,7 @@ public class Main {
         new JsonWriter().write(data, "C:\\Users\\Jaye\\Desktop\\Test.json");
 
 */
-        String path = "F:\\Intern - nCinga\\Dev\\2nd one\\JC\\865834  RM Chart 2nd Proto.xlsx";
+      String path = "F:\\Intern - nCinga\\Dev\\2nd one\\JC\\865834  RM Chart 2nd Proto.xlsx";
 
        HashMap sheet1 = new ReadSheet1().finalOutput(path);
        new JsonWriter().write(sheet1, "C:\\Users\\Jaye\\Desktop\\Sheet1.json");

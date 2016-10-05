@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Amila on 2016-09-27.
@@ -548,6 +549,23 @@ public class ExcelReader {
             throw new RuntimeException("Excel columns are mismatch");
         }
 
+    }
+
+
+    public boolean hardCodeValidator (XSSFSheet sheet, Object [][] headers){
+        boolean validate = false;
+        for (int i= 0; i< headers.length; i++){
+            int row = (int)headers[i][0];
+            int column = (int)headers[i][1];
+            XSSFCell cell = sheet.getRow(row).getCell(column);
+            if (getValue(cell).toString().trim().equals(headers[i][2])){
+                System.out.println("Excel Data in row " +row +  " and column " + column+ " is validated");
+                validate = true;
+            }else {
+                throw new RuntimeException("Excel Data in row " +row +  " and column " + column+ " is mismatch");
+            }
+        }
+        return validate;
     }
 
 }

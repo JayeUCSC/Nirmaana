@@ -14,6 +14,9 @@ public class ReadSheet3 {
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
+
+        Object [][] hardcodeValues = {{35,0,"FTT 1 PERCENTAGE"},{35,2,"QUALITY PERSON NAME & SIGNATURE"},{30,7,"CHECK FINISH"},{7,15,"FTT - 2 DETAILS"}, {9,15,"FTT -2 STATUS\n" +
+                "(PLEASE TICK) (ü)"}};
         HashMap <String,Object> sheet3  = new HashMap();
         sheet3.putAll(sewingInfo(path));
         sheet3.putAll(qualityInfo(path));
