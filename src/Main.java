@@ -26,7 +26,7 @@ public class Main {
         new JsonWriter().write(data, "C:\\Users\\Jaye\\Desktop\\Test.json");
 
 */
-      String path = "F:\\Intern - nCinga\\Dev\\2nd one\\JC\\865834  RM Chart 2nd Proto.xlsx";
+      String path = "F:\\Intern - nCinga\\Dev\\2nd one\\JC\\job card 855161_Presentation.xlsx";
 
        HashMap sheet1 = new ReadSheet1().finalOutput(path);
        new JsonWriter().write(sheet1, "C:\\Users\\Jaye\\Desktop\\Sheet1.json");

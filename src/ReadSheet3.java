@@ -10,26 +10,54 @@ import java.util.HashMap;
 /**
  * Created by Jaye on 10/3/2016.
  */
-public class ReadSheet3 {
+public class ReadSheet3 implements Configuration{
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
 
+        System.out.println("---------------------------- Reading sheet3 -----------------------------------------");
         FileInputStream fs = new FileInputStream(new File(path));
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         XSSFSheet sheet = wb.getSheetAt(3);
-        Object [][] hardcodeValues = {{7,0,"SEWING INFORMATION"},{29,0,"QUALITY INFORMATION"},{35,0,"FTT 1 PERCENTAGE"},{35,2,"QUALITY PERSON NAME & SIGNATURE"},{30,7,"CHECK FINISH"},{39,0,"DAMAGE STATUS"},{7,15,"FTT - 2 DETAILS"}, {9,15,"FTT -2 STATUS\n" +
+/*        Object [][] hardcodeValues = {{7,0,"SEWING INFORMATION"},{29,0,"QUALITY INFORMATION"},{35,0,"FTT 1 PERCENTAGE"},{35,2,"QUALITY PERSON NAME & SIGNATURE"},{30,7,"CHECK FINISH"},{39,0,"DAMAGE STATUS"},{7,15,"FTT - 2 DETAILS"}, {9,15,"FTT -2 STATUS\n" +
                 "(PLEASE TICK) (ü)"},{0,20,"PTP & OTD DETAILS"},{3,20,"PTP"},{5,20,"OTD \n" +
                 "(PLEASE TICK)"},{7,20,"FAILURE REASONS"}};
-        reader.hardCodeValidator(sheet,hardcodeValues);
-        System.out.println("Sheet 3 fully validated");
+*/
 
         HashMap <String,Object> sheet3  = new HashMap();
-        sheet3.putAll(sewingInfo(path));
-        sheet3.putAll(qualityInfo(path));
-        sheet3.putAll(readFitDetails(path));
-        sheet3.putAll(ironDetails(path));
-        sheet3.putAll(ptpAndOtdDetails(path));
+
+        try {
+            reader.hardCodeValidator(sheet, sheet3HardcodeValues);
+        } catch (RuntimeException ex){
+        }
+
+        try {
+            sheet3.putAll(sewingInfo(path));
+        } catch (RuntimeException ex){
+        }
+
+        try {
+            sheet3.putAll(qualityInfo(path));
+        } catch (RuntimeException ex){
+        }
+
+        try {
+            sheet3.putAll(readFitDetails(path));
+        } catch (RuntimeException ex){
+        }
+
+        try {
+            sheet3.putAll(ironDetails(path));
+        } catch (RuntimeException ex){
+        }
+
+        try {
+            sheet3.putAll(ptpAndOtdDetails(path));
+        } catch (RuntimeException ex){
+        }
+
+
+        System.out.println("Sheet 3 fully validated");
         return sheet3;
     }
 
@@ -44,11 +72,11 @@ public class ReadSheet3 {
         XSSFSheet sheet = wb.getSheetAt(3);
         String header = reader.getValue(sheet.getRow(7).getCell(0)).toString();
 
-        String [] headerArray1 = {"STYLE FED DATE","STYLE FED TIME","IRON HAND OVER DATE/TIME"};
-        String [] headerArray2 = {"TEAM NO","TEAM LEADER","NO OF SMO'S ALLOCATED"};
+        //String [] headerArray1 = {"STYLE FED DATE","STYLE FED TIME","IRON HAND OVER DATE/TIME"};
+        //String [] headerArray2 = {"TEAM NO","TEAM LEADER","NO OF SMO'S ALLOCATED"};
 
-        int [] rawHeaders = reader.rowHeaderValidator(sheet,8,0,headerArray1);
-        int [] rawheaders2 = reader.rowHeaderValidator(sheet,8,7,headerArray2);
+        int [] rawHeaders = reader.rowHeaderValidator(sheet,8,0,sheet3SewingInfoHeaderArray1);
+        int [] rawheaders2 = reader.rowHeaderValidator(sheet,8,7,sheet3SewingInfoHeaderArray2);
 
         table1part1 = reader.readRowHeaderTable(sheet, 0, rawHeaders,2,2 );
         table1part2 = reader.readRowHeaderTable(sheet,7,rawheaders2,11,11);
@@ -57,10 +85,10 @@ public class ReadSheet3 {
 
         /** -------------------------------------------------------------------------------------------------------------------- **/
 
-        String [][] headerArray3 = {{"TEAM MEMBER EPF NO"},{"TEAM MEMBER NAME"},{"SEWING START DATE"},{"SEWING START TIME"},{"SEWING FINISH DATE"},{"SEWING FINISH TIME"},
+/*        String [][] headerArray3 = {{"TEAM MEMBER EPF NO"},{"TEAM MEMBER NAME"},{"SEWING START DATE"},{"SEWING START TIME"},{"SEWING FINISH DATE"},{"SEWING FINISH TIME"},
                 {"TOTAL TIME DURATION"},{"OT STATUS"},{"OT HRS"}};
-
-        int [][] columnHeaders = reader.validator(sheet,14,headerArray3 );
+*/
+        int [][] columnHeaders = reader.validator(sheet,14,sheet3SewingInfoHeaderArray3);
         HashMap table2 = reader.readComplexColumnHeaderTable(sheet, 14, columnHeaders, 15, 27);
         table.putAll(table2);
 
@@ -79,11 +107,11 @@ public class ReadSheet3 {
         XSSFSheet sheet = wb.getSheetAt(3);
         String header = reader.getValue(sheet.getRow(29).getCell(0)).toString();
 
-        String [] Columns = {"REQUIRED","RECEIEVED","CHECK","PASS"};
-        String [] Headers = {"QTY"};
+        //String [] Columns = {"REQUIRED","RECEIEVED","CHECK","PASS"};
+        //String [] row = {"QTY"};
 
-        int[] columnNumbers = reader.columnHeaderValidator(sheet,30,Columns);
-        int[] rowIndexes = reader.rowHeaderValidator(sheet,30,0,Headers);
+        int[] columnNumbers = reader.columnHeaderValidator(sheet,30,sheet3QualityInfoColumns);
+        int[] rowIndexes = reader.rowHeaderValidator(sheet,30,0,sheet3QualityInforow);
 
         part1 =reader.readColumnAndRowHeaderTable(sheet,30, 0, columnNumbers, 31, 31, rowIndexes);
         part1.put(reader.getValue(sheet.getRow(35).getCell(0)).toString(),reader.getValue(sheet.getRow(35).getCell(1)).toString());
@@ -106,8 +134,8 @@ public class ReadSheet3 {
         table.put(header,part1);
 
         String header2 = reader.getValue(sheet.getRow(39).getCell(0)).toString();
-        String [][] damageColumns = {{"EPF NO"},{"NAME"},{"CRITICAL"} ,{"MAJOR"},{"MINOR"},{"DEFERECT CODE"}};
-        int[][] damageColumnNumbers = reader.validator(sheet, 40,damageColumns);
+        //String [][] damageColumns = {{"EPF NO"},{"NAME"},{"CRITICAL"} ,{"MAJOR"},{"MINOR"},{"DEFERECT CODE"}};
+        int[][] damageColumnNumbers = reader.validator(sheet, 40,sheet3DamageColumns);
         damageInfo = reader.readComplexColumnHeaderTable(sheet,40,damageColumnNumbers,41,45);
         table.put(header2,damageInfo);
 
@@ -129,8 +157,8 @@ public class ReadSheet3 {
         part1.put( reader.getValue(sheet.getRow(9).getCell(18)).toString(), reader.getValue(sheet.getRow(10).getCell(18)).toString());
         combine.put(reader.getValue(sheet.getRow(9).getCell(15)).toString(),part1);
 
-        String [] rowHeaders = {"REASONS FOR FAILURES","REJECTED QTY"};
-        int [] rows = reader.columnHeaderValidator(sheet,11,rowHeaders);
+        //String [] rowHeaders = {"REASONS FOR FAILURES","REJECTED QTY"};
+        int [] rows = reader.columnHeaderValidator(sheet,11,sheet3FttDetailsRowHeaders);
         part2 = reader.readColumnHeaderTable(sheet,11,rows,12,18);
         combine.putAll(part2);
 
@@ -146,8 +174,8 @@ public class ReadSheet3 {
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         XSSFSheet sheet = wb.getSheetAt(3);
 
-        String[] headers = {"IRON EPF", "IRONER NAME", "IRON START DATE", "IRON START TIME", "IRON FINISH DATE", "IRON FINISH TIME", "IRON QTY"};
-        int[] rowHeaders = reader.rowHeaderValidator(sheet,19,15,headers);
+        //String[] headers = {"IRON EPF", "IRONER NAME", "IRON START DATE", "IRON START TIME", "IRON FINISH DATE", "IRON FINISH TIME", "IRON QTY"};
+        int[] rowHeaders = reader.rowHeaderValidator(sheet,19,15,sheet3IronHeaders);
         combine = reader.readRowHeaderTable(sheet, 15, rowHeaders, 17, 17);
 
         String temp = reader.getValue(sheet.getRow(26).getCell(15)).toString() ;
@@ -186,7 +214,7 @@ public class ReadSheet3 {
 
         combine.put(reader.getValue(sheet.getRow(4).getCell(22)).toString(), odt);
         combine.put(reader.getValue(sheet.getRow(2).getCell(20)).toString(), ptp);
-
+/*
         String[] rowHeaders = {"FABRIC DAMAGE (HOLE/RUN)", "FABRIC SHADING", "MEASUREMENT - TO TO SPEC",
                 "CONSTUCTION - BORKEN/DROP/SKIP STITCH", "CONSTRUCTION - RAW EDGES / FRAYED SEAMS",
                 "CONSTRUCTION - OPEN/ DELAMINATED SEAM", "CONSTRUCTION - OVERRUN STITCHES",
@@ -197,7 +225,8 @@ public class ReadSheet3 {
                 "EMBELLISHMENT - POOR COVERAGE/ POOR REGISTRATION/ CRACKING", "EMBELLISHMENT - OUT OF TOLERANCE",
                 "LABEL - MISSING / INCORRECT / IN COMPLETE",
                 "APPEARANCE - SOIL / DIRT MARK", "APPEARANCE - UNATTACHED / UNTRIMMED THREADS", "OTHER ISSUE"};
-        int[] headerIndexes = reader.rowHeaderValidator(sheet, 8, 20, rowHeaders);
+*/
+        int[] headerIndexes = reader.rowHeaderValidator(sheet, 8, 20, sheet3PtpAndOtdrowHeaders);
         failureReasons = reader.readRowHeaderTable(sheet, 20, headerIndexes, 23, 23);
 
         combine.put(reader.getValue(sheet.getRow(7).getCell(20)).toString(), failureReasons);

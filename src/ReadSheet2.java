@@ -17,26 +17,52 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author acer
  */
-public class ReadSheet2 {
+public class ReadSheet2 implements Configuration{
 
 
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
 
-     /*   FileInputStream fs = new FileInputStream(new File(path));
+        FileInputStream fs = new FileInputStream(new File(path));
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         XSSFSheet sheet = wb.getSheetAt(2);
-        Object [][] hardcodeValues = {{6,9,"Total"},{6,10,"Test Cut Requirement"}};
-        reader.hardCodeValidator(sheet,hardcodeValues);
-        System.out.println("Sheet 2 fully validated");
-      */
+  /*      Object [][] hardcodeValues = {{2,5,"SAMPLE TYPE"},{6,5,"EARLY COMPETION TIME"},{3,13,"Add. Cuts"}, {3,14,"Total"},{6,14,"SAMPLE PLAN END DATE & TIME"},
+                {14,0,"Confirmation From Stores"},{14,10,"DATE",14,15,"TIME:"},{15,0,"Verification (G.Tech)"},{15,10,"DATE"},{15,15,"TIME:"},
+                {17,0,"CUTTING TEAM :"},{17,15,"CUT DATE :"},{18,0,"CUTTER/S NAME :"},{18,15,"CUT TIME :"} ,
+                {26,0,"CPI DONE BY :"},{26,16,"VERIFICATION DONE BY :"},{27,0,"COMMENTS :"},{27,16,"COMMENTS :"}};
+*/
+        System.out.println("---------------------------- Reading sheet2 -----------------------------------------");
         HashMap <String,Object> sheet2  = new HashMap();
-        sheet2.putAll(readTable1(path));
-        sheet2.putAll(readTable2(path));
-        sheet2.putAll(readTable3(path));
-        sheet2.putAll(readTable4(path));
+        try {
+            reader.hardCodeValidator(sheet,sheet2HardcodeValues);
+        } catch (RuntimeException ex){
 
+        }
+
+        try {
+            sheet2.putAll(readTable1(path));
+        } catch (RuntimeException ex){
+
+        }
+
+        try {
+            sheet2.putAll(readTable2(path));
+        } catch (RuntimeException ex){
+
+        }
+        try {
+            sheet2.putAll(readTable3(path));
+        } catch (RuntimeException ex){
+
+        }
+        try {
+            sheet2.putAll(readTable4(path));
+        } catch (RuntimeException ex){
+
+        }
+
+        System.out.println("Sheet 2 fully validated");
         return sheet2;
     }
 
@@ -54,11 +80,11 @@ public class ReadSheet2 {
         Read Table 1 of the sheet 1
         */
 
-        String [] headerArray1 = {"BUSINESS DIVISION","CUSTOMER NAME/CATEGORY","SEASON","STYLE NO","SAMPLE SMV"};
-        String [] headerArray2 = {"SILHOUETTE","MERCHANT NAME","GARMENT TECH NAME"};
+        //String [] headerArray1 = {"BUSINESS DIVISION","CUSTOMER NAME/CATEGORY","SEASON","STYLE NO","SAMPLE SMV"};
+        //String [] headerArray2 = {"SILHOUETTE","MERCHANT NAME","GARMENT TECH NAME"};
         //int rowIndexOfHeaderStart, int columnIndexOfHeaders, String[] headerArray
-        int [] rawHeaders = reader.rowHeaderValidator(sheet,2,0,headerArray1);
-        int [] rawheaders2 = reader.rowHeaderValidator(sheet,2,15,headerArray2);
+        int [] rawHeaders = reader.rowHeaderValidator(sheet,2,0,sheet2Table1HeaderArray1);
+        int [] rawheaders2 = reader.rowHeaderValidator(sheet,2,15,sheet2Table1HeaderArray2);
 //
         table1part1 = reader.readRowHeaderTable(sheet,0, rawHeaders,2,2 );
         table1part2 = reader.readRowHeaderTable(sheet,15,rawheaders2,17,17);
@@ -67,12 +93,12 @@ public class ReadSheet2 {
 
 /** ----------------------------------------------------------------------------------------------------------------------- **/
 
-        String [] headerArray3 = {"QTY" };
-        String [] headerArray4 = {"XS","S","M","L","XL","XXL" };
+        //String [] headerArray3 = {"QTY" };
+        //String [] headerArray4 = {"XS","S","M","L","XL","XXL" };
         //int rowIndexOfHeaderStart, int columnIndexOfHeaders, String[] headerArray
 
-        int [] rawheaders3 = reader.rowHeaderValidator(sheet,3,5,headerArray3);
-        int [] columnHeaders4 = reader.columnHeaderValidator(sheet, 3, headerArray4);
+        int [] rawheaders3 = reader.rowHeaderValidator(sheet,3,5,sheet2SizeMetrixRows);
+        int [] columnHeaders4 = reader.columnHeaderValidator(sheet, 3, sheet2SizeMetrixColumns);
 
 //
         //int [] rawHeaders3={3,4};
@@ -110,12 +136,12 @@ public class ReadSheet2 {
         Read Table 1 of the sheet 1
         */
 
-        String [] headerArray1 = {"MARKER #","IM #","FABRIC COLOR","Fabric Face","SPECIAL NOTES"};
-        String [] headerArray2 = {"MARKER A","MARKER B","MARKER C","MARKER D","MARKER E","MARKER F"};
+        //String [] headerArray1 = {"MARKER #","IM #","FABRIC COLOR","Fabric Face","SPECIAL NOTES"};
+        //String [] headerArray2 = {"MARKER A","MARKER B","MARKER C","MARKER D","MARKER E","MARKER F"};
         //int rowIndexOfHeaderStart, int columnIndexOfHeaders, String[] headerArray
 
-        int [] rawHeaders = reader.columnHeaderValidator(sheet, 9, headerArray2);
-        int [] rawheaders2 = reader.rowHeaderValidator(sheet,9,0,headerArray1);
+        int [] rawHeaders = reader.columnHeaderValidator(sheet, 9, sheet2FabricDetailsColumns);
+        int [] rawheaders2 = reader.rowHeaderValidator(sheet,9,0,sheet2FabricDetailsRows);
 //
         table2part1 = reader.readColumnAndRowHeaderTable(sheet, 9, 0, rawHeaders, 9, 13, rawheaders2);
 
@@ -172,12 +198,12 @@ public class ReadSheet2 {
         Read Table 1 of the sheet 1
         */
 
-        String [] headerArray1 = {"SIZE","RATIO","NO OF PLIES","TOTAL CUT QTY","REQUIRED QTY"};
-        String [] headerArray2 = {"XS","S","M","L","XL" };
+        //String [] headerArray1 = {"SIZE","RATIO","NO OF PLIES","TOTAL CUT QTY","REQUIRED QTY"};
+        //String [] headerArray2 = {"XS","S","M","L","XL" };
         //int rowIndexOfHeaderStart, int columnIndexOfHeaders, String[] headerArray
 
-        int [] rawHeaders = reader.columnHeaderValidator(sheet, 19, headerArray2);
-        int [] rawheaders2 = reader.rowHeaderValidator(sheet,19,0,headerArray1);
+        int [] rawHeaders = reader.columnHeaderValidator(sheet, 19, sheet2CuttingInfoColumns);
+        int [] rawheaders2 = reader.rowHeaderValidator(sheet,19,0,sheet2CuttingInfoRows);
 //
         table3part1 = reader.readColumnAndRowHeaderTable(sheet, 19, 0, rawHeaders, 19, 23, rawheaders2);
 

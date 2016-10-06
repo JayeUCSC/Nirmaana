@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ExcelReader {
 
-    
+
 
     public HashMap readColumnHeaderTable(XSSFSheet workSheet, int rowIndexOfHeaderStart, int[] headerIndexes, int rowIndexOfStartCell, int rowIndexOfEndCell) {
 
@@ -467,7 +467,7 @@ public class ExcelReader {
             if (status) {
                 continue;
             } else {
-                System.out.println(headerArray[i][0] + " column is mismatch with Excel columns");
+                System.out.println(" \" "+headerArray[i] +"\" " + " column is mismatch with Excel columns");
                 validation = false;
                 //hti@lit123
                 //itu@volta#2
@@ -476,7 +476,7 @@ public class ExcelReader {
         }
 
         if (validation) {
-            System.out.println("--- Headers are successfully validated ---");
+            //System.out.println("--- Headers are successfully validated ---");
             return result;
         } else {
             throw new RuntimeException("Excel columns are mismatch");
@@ -504,12 +504,12 @@ public class ExcelReader {
             if (status) {
                 continue;
             } else {
-                System.out.println(headerArray[i] + " Row is mismatch with Excel columns");
+                System.out.println(" \" "+headerArray[i] +"\" "+ " row hwader is mismatch with Excel sheet");
                 validation = false;
             }
         }
         if (validation) {
-            System.out.println("--- Headers are successfully validated ---");
+            //System.out.println("--- Headers are successfully validated ---");
             return result;
         } else {
             throw new RuntimeException("Excel Rows are mismatch");
@@ -536,12 +536,12 @@ public class ExcelReader {
             if (status) {
                 continue;
             } else {
-                System.out.println(headerArray[i] + " column is mismatch with Excel columns");
+                System.out.println( " \" "+headerArray[i] +"\" "+ " column is mismatch with Excel columns");
                 validation = false;
             }
         }
         if (validation) {
-            System.out.println("--- Headers are successfully validated ---");
+            //System.out.println("--- Headers are successfully validated ---");
             return result;
         } else {
             throw new RuntimeException("Excel columns are mismatch");
@@ -550,17 +550,21 @@ public class ExcelReader {
     }
 
     public void hardCodeValidator (XSSFSheet sheet, Object [][] headers){
-
+        boolean status = false;
         for (int i= 0; i< headers.length; i++){
             int row = (int)headers[i][0];
             int column = (int)headers[i][1];
             XSSFCell cell = sheet.getRow(row).getCell(column);
             if (getValue(cell).toString().trim().equals(headers[i][2])){
-                System.out.println("Excel Data in row " +row +  " and column " + column+ " is validated");
+                //System.out.println("Excel Data in row " +row +  " and column " + column+ " is validated");
 
             }else {
-                throw new RuntimeException("Excel Data in row " +row +  " and column " + column+ " is mismatch");
+                status = true;
+                System.out.println("Excel Data in row " +row +  " and column " + column+ " is mismatch");
             }
+        }
+        if (status){
+            throw new RuntimeException("Excel Data in row is mismatch");
         }
 
     }

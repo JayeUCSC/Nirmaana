@@ -11,23 +11,41 @@ import java.util.HashMap;
 /**
  * Created by Jaye on 9/30/2016.
  */
-public class ReadSheet1 {
+public class ReadSheet1 implements Configuration{
 
     ExcelReader reader =  new ExcelReader();
 
     public HashMap finalOutput (String path) throws IOException {
 
+        System.out.println("---------------------------- Readding sheet1 -----------------------------------------");
+        boolean status = false;
+
         FileInputStream fs = new FileInputStream(new File(path));
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         XSSFSheet sheet = wb.getSheetAt(0);
-        Object [][] hardcodeValues = {{6,9,"Total"},{6,10,"Test Cut Requirement"}};
-        reader.hardCodeValidator(sheet,hardcodeValues);
-        System.out.println("Sheet 1 fully validated");
+        //Object [][] hardcodeValues = {{6,9,"Total"},{6,10,"Test Cut Requirement"}};
+
 
         HashMap <String,Object> sheet1  = new HashMap();
-        sheet1.putAll(readTable1(path));
-        sheet1.putAll(readTable2(path));
+        try {
+            reader.hardCodeValidator(sheet, sheet1HardcodeValues);
+        } catch (RuntimeException ex){
+            status = true;
+        }
 
+        try {
+            sheet1.putAll(readTable1(path));
+        } catch (RuntimeException ex){
+            status = true;
+        }
+
+        try {
+            sheet1.putAll(readTable2(path));
+        } catch (RuntimeException ex){
+            status = true;
+        }
+
+        System.out.println("Sheet 1 fully validated");
         return sheet1;
     }
 
@@ -45,11 +63,11 @@ public class ReadSheet1 {
         Read Table 1 of the sheet 1
         */
 
-        String [] headerArray1 = {"Business Division","Style No","Season","Style Name","Silhouette"};
-        String [] headerArray2 = {"Customer Name/Category","Sample Type","Merchant Name","Garment Tech Name"};
+        //String [] headerArray1 = {"Business Division","Style No","Season","Style Name","Silhouette"};
+        //String [] headerArray2 = {"Customer Name/Category","Sample Type","Merchant Name","Garment Tech Name"};
 
-        int [] rawHeaders = reader.rowHeaderValidator(sheet,1,1,headerArray1);
-        int [] rawheaders2 = reader.rowHeaderValidator(sheet,1,5,headerArray2);
+        int [] rawHeaders = reader.rowHeaderValidator(sheet,1,1,sheet1Table1HeaderArray1);
+        int [] rawheaders2 = reader.rowHeaderValidator(sheet,1,5,sheet1Table1HeaderArray2);
 
         table1part1 = reader.readRowHeaderTable(sheet, 1, rawHeaders,3,3 );
         table1part2 = reader.readRowHeaderTable(sheet,5,rawheaders2,8,8);
@@ -58,11 +76,11 @@ public class ReadSheet1 {
 
 /** ----------------------------------------------------------------------------------------------------------------------- **/
 
-        String [] sizeMetrixColumns = {"XS","S","M","L","XL","XXL"};
-        String [] sizeMetrixHeaders = {"QTY","Aditional QTY"};
+        //String [] sizeMetrixColumns = {"XS","S","M","L","XL","XXL"};
+        //String [] sizeMetrixHeaders = {"QTY","Aditional QTY"};
 
-        int[] columnNumbers = reader.columnHeaderValidator(sheet,6,sizeMetrixColumns);
-        int[] rowIndexes = reader.rowHeaderValidator(sheet,7,1,sizeMetrixHeaders);
+        int[] columnNumbers = reader.columnHeaderValidator(sheet,6,sheet1sizeMetrixColumns);
+        int[] rowIndexes = reader.rowHeaderValidator(sheet,7,1,sheet1sizeMetrixHeaders);
 
         sizeMetrix =reader.readColumnAndRowHeaderTable(sheet,6, 1, columnNumbers, 3, 8, rowIndexes);
         table1.put("sizeMetrix", sizeMetrix);
@@ -86,15 +104,15 @@ public class ReadSheet1 {
         XSSFWorkbook wb = new XSSFWorkbook(fs);
         XSSFSheet sheet = wb.getSheetAt(0);
 
-        String [][] headerIndexes = {{"ITEM"},{"IM"},{"Sub IM"},{"ITEM COLOR"},{"Sub color"},{"CW"},{"WIDTH/SIZE"},{"ITEM QTY"},{"Fabric Face Side"}, {"USAGE"},{"SUPPLIER"},{"DESCREPTION"},{"COMMENTS AND REMARKS"}};
+        //String [][] headers = {{"ITEM"},{"IM"},{"Sub IM"},{"ITEM COLOR"},{"Sub color"},{"CW"},{"WIDTH/SIZE"},{"ITEM QTY"},{"Fabric Face Side"}, {"USAGE"},{"SUPPLIER"},{"DESCREPTION"},{"COMMENTS AND REMARKS"}};
 
-        int [][] intheaderIndexes = reader.validator(sheet,10,headerIndexes);
+        int [][] headerIndexes = reader.validator(sheet,10,sheet1table2Headers);
 
 
         //int [][] a = {{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}};
-        part1 = reader.readComplexColumnHeaderTable(sheet, 10, intheaderIndexes, 11,16);
-        part2 = reader.readComplexColumnHeaderTable(sheet, 10, intheaderIndexes, 17,23);
-        part3 = reader.readComplexColumnHeaderTable(sheet, 10, intheaderIndexes, 24,30);
+        part1 = reader.readComplexColumnHeaderTable(sheet, 10, headerIndexes, 11,16);
+        part2 = reader.readComplexColumnHeaderTable(sheet, 10, headerIndexes, 17,23);
+        part3 = reader.readComplexColumnHeaderTable(sheet, 10, headerIndexes, 24,30);
 
         table2.put(reader.getValue(sheet.getRow(11).getCell(1)).toString(), part1);
         table2.put(reader.getValue(sheet.getRow(17).getCell(1)).toString(), part2);
